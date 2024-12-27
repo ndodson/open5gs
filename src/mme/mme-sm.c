@@ -265,8 +265,8 @@ void mme_state_operational(ogs_fsm_t *s, mme_event_t *e)
         break;
 
     case MME_EVENT_EMM_MESSAGE:
-        ogs_debug("----- RECEIVED EMM MESSAGE -----")
-            pkbuf = e->pkbuf;
+        ogs_debug("----- RECEIVED EMM MESSAGE -----");
+        pkbuf = e->pkbuf;
         ogs_assert(pkbuf);
 
         enb_ue = enb_ue_find_by_id(e->enb_ue_id);
@@ -283,23 +283,23 @@ void mme_state_operational(ogs_fsm_t *s, mme_event_t *e)
             return;
         }
 
-        ogs_debug("----- SEARCHING FOR UE VIA UE ID: %d -----", enb_ue->mme_ue_id)
-            mme_ue = mme_ue_find_by_id(enb_ue->mme_ue_id);
+        ogs_debug("----- SEARCHING FOR UE VIA UE ID: %d -----", enb_ue->mme_ue_id);
+        mme_ue = mme_ue_find_by_id(enb_ue->mme_ue_id);
         if (!mme_ue)
         {
-            ogs_debug("----- COULD NOT FIND BY UE ID. SEARCHING VIA NAS MESSAGE -----")
-                mme_ue = mme_ue_find_by_message(&nas_message);
+            ogs_debug("----- COULD NOT FIND BY UE ID. SEARCHING VIA NAS MESSAGE -----");
+            mme_ue = mme_ue_find_by_message(&nas_message);
             if (!mme_ue)
             {
-                ogs_debug("----- COULD NOT FIND BY NAS MESSAGE. ADDING ENB UE -----")
-                    mme_ue = mme_ue_add(enb_ue);
+                ogs_debug("----- COULD NOT FIND BY NAS MESSAGE. ADDING ENB UE -----");
+                mme_ue = mme_ue_add(enb_ue);
                 if (mme_ue == NULL)
                 {
-                    ogs_debug("----- COULD NOT ADD UE. RELEASING -----")
-                        r = s1ap_send_ue_context_release_command(enb_ue,
-                                                                 S1AP_Cause_PR_misc,
-                                                                 S1AP_CauseMisc_control_processing_overload,
-                                                                 S1AP_UE_CTX_REL_S1_CONTEXT_REMOVE, 0);
+                    ogs_debug("----- COULD NOT ADD UE. RELEASING -----");
+                    r = s1ap_send_ue_context_release_command(enb_ue,
+                                                             S1AP_Cause_PR_misc,
+                                                             S1AP_CauseMisc_control_processing_overload,
+                                                             S1AP_UE_CTX_REL_S1_CONTEXT_REMOVE, 0);
                     ogs_expect(r == OGS_OK);
                     ogs_assert(r != OGS_ERROR);
                     ogs_pkbuf_free(pkbuf);
@@ -310,14 +310,14 @@ void mme_state_operational(ogs_fsm_t *s, mme_event_t *e)
             }
             else
             {
-                ogs_debug("----- FOUND UE BY NAS MESSAGE -----")
-                    /* Here, if the MME_UE Context is found,
-                     * the integrity check is not performed
-                     * For example, ATTACH_REQUEST,
-                     * TRACKING_AREA_UPDATE_REQUEST message
-                     *
-                     * Now, We will check the MAC in the NAS message*/
-                    ogs_nas_security_header_type_t h;
+                ogs_debug("----- FOUND UE BY NAS MESSAGE -----");
+                /* Here, if the MME_UE Context is found,
+                 * the integrity check is not performed
+                 * For example, ATTACH_REQUEST,
+                 * TRACKING_AREA_UPDATE_REQUEST message
+                 *
+                 * Now, We will check the MAC in the NAS message*/
+                ogs_nas_security_header_type_t h;
                 h.type = e->nas_type;
                 if (h.integrity_protected)
                 {
@@ -363,9 +363,9 @@ void mme_state_operational(ogs_fsm_t *s, mme_event_t *e)
                       mme_ue->imsi_bcd);
             CLEAR_MME_UE_TIMER(mme_ue->t_mobile_reachable);
         }
-        ogs_debug("----- FOUND UE BY ID -----")
+        ogs_debug("----- FOUND UE BY ID -----");
 
-            ogs_assert(mme_ue);
+        ogs_assert(mme_ue);
         if (!OGS_FSM_STATE(&mme_ue->sm))
         {
             ogs_fatal("MESSAGE[%d]", nas_message.emm.h.message_type);
