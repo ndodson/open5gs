@@ -38,7 +38,7 @@ void ogs_sockopt_init(ogs_sockopt_t *option)
 
     memset(option, 0, sizeof *option);
 
-    option->sctp.spp_hbinterval = 5000;         /* 5 seconds */
+    option->sctp.spp_hbinterval = 120000;         /* 2 minutes */
     option->sctp.spp_sackdelay = 200;           /* 200 ms */
     option->sctp.srto_initial = 3000;           /* 3 seconds */
     option->sctp.srto_min = 1000;               /* 1 seconds */
